@@ -45,5 +45,7 @@ Then('the target proposal should be successfully verified', async function () {
 });
 
 After(async function () {
-	await browser.close();
+	if (browser) {
+		await browser.close();
+	}
 });

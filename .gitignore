@@ -1,4 +1,6 @@
 node_modules/
+.playwright-mcp/
+.tmp-gh-cache/
 
 # Playwright test artifacts
 playwright-report/
