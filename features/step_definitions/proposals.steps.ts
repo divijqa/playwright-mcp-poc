@@ -10,19 +10,20 @@ setDefaultTimeout(60_000);
 
 let browser: ChromiumBrowser;
 let page: Page;
+const targetUrl = 'https://demo.playwright.dev/todomvc/';
 
 Before(async function () {
-	browser = await chromium.launch({ headless: false });
+	browser = await chromium.launch({ headless: process.env.CI !== 'true' });
 	page = await browser.newPage();
 });
 
 Given('the user navigates to the login gateway', async function () {
-	await page.goto('https://playwright.dev');
+	await page.goto(targetUrl);
 });
 
 When('the user authenticates and handles the dynamic landing state', async function () {
 	console.log('[POC] Executing live browser snapshot analysis via MCP...');
-	const pageState = await analyzeLivePageState();
+	const pageState = await analyzeLivePageState(targetUrl);
 
 	if (pageState.status === 'ERROR_STATE') {
 		console.error('[HEAL] Detected a system failure routing block. Forcing a refresh...');

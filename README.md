@@ -53,7 +53,8 @@ playwright-mcp-poc/
 │   └── step_definitions/
 │       └── proposals.steps.ts
 ├── scripts/
-│   └── mcp-evaluator.ts
+│   ├── mcp-evaluator.ts
+│   └── self-healer.ts
 ├── cucumber.js
 ├── package.json
 └── tsconfig.json
@@ -98,6 +99,38 @@ npx cucumber-js --dry-run
 ```bash
 npx tsc --noEmit --pretty false
 ```
+
+## Automated Self-Healing Pull Requests
+
+The optional self-healer publishes a validated change to a dedicated branch and can open a pull request through the GitHub API. It is deliberately separate from the normal test command: Cucumber does not create branches, commit files, or push code automatically.
+
+The workflow is:
+
+1. A healer updates an approved step-definition file.
+2. The self-healer stages only files under `features/step_definitions/`.
+3. It creates a branch matching `fix/auto-heal-<description>`.
+4. It commits and pushes the branch to `origin`.
+5. When `GITHUB_TOKEN` is available, it creates a GitHub pull request targeting `main`.
+
+Run it only after reviewing the generated change:
+
+```bash
+SELF_HEAL_FILES=features/step_definitions/proposals.steps.ts \
+SELF_HEAL_BRANCH=fix/auto-heal-proposal-grid \
+SELF_HEAL_COMMIT_MESSAGE="fix: self-heal dynamic locator for proposal cards" \
+npm run self-heal
+```
+
+To create the pull request, provide a token with the minimum required repository permissions:
+
+```bash
+GITHUB_TOKEN=your-token \
+SELF_HEAL_FILES=features/step_definitions/proposals.steps.ts \
+SELF_HEAL_BRANCH=fix/auto-heal-proposal-grid \
+npm run self-heal
+```
+
+The command refuses files outside `features/step_definitions/` and refuses branch names that do not use the `fix/auto-heal-*` convention. Review the resulting pull request before merging.
 
 ## Roadmap
 

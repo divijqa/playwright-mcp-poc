@@ -1,0 +1,32 @@
+name: Automated End-to-End Testing & Self-Healing Pipeline
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  test:
+    timeout-minutes: 15
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js Environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: npm
+
+      - name: Install Project Dependencies
+        run: npm ci
+
+      - name: Install System Playwright Browsers
+        run: npx playwright install --with-deps
+
+      - name: Run Cucumber BDD Test Suite with Integrated MCP Healer
+        run: npx cucumber-js
