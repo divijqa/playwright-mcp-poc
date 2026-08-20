@@ -13,7 +13,7 @@ let page: Page;
 const targetUrl = 'https://demo.playwright.dev/todomvc/';
 
 Before(async function () {
-	browser = await chromium.launch({ headless: process.env.CI !== 'true' });
+		browser = await chromium.launch({ headless: process.env.HEADFUL !== 'true' });
 	page = await browser.newPage();
 });
 
