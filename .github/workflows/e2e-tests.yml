@@ -19,7 +19,7 @@ jobs:
       - name: Setup Node.js Environment
         uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 24
           cache: npm
 
       - name: Install Project Dependencies
@@ -29,4 +29,6 @@ jobs:
         run: npx playwright install --with-deps
 
       - name: Run Cucumber BDD Test Suite with Integrated MCP Healer
+        env:
+          CI: 'true'
         run: npx cucumber-js
