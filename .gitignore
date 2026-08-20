@@ -1,0 +1,21 @@
+node_modules/
+
+# Playwright test artifacts
+playwright-report/
+blob-report/
+test-results/
+
+# Coverage and build output
+coverage/
+dist/
+
+# Local environment files
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+
+# macOS metadata
+.DS_Store
